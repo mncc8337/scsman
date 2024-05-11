@@ -28,18 +28,22 @@ def parse(colorscheme, template):
     if not colorscheme_available(colorscheme):
         quit(f"no such colorscheme: {colorscheme}")
 
+    # load text in template file
     text = None
     with open(path.join(templates, template), 'r') as f:
         text = f.read()
 
+    # load colorscheme
     color = None
     with open(path.join(colorschemes, f"{colorscheme}.json"), 'r') as f:
         color = json.load(f)
 
+    # replace all {key} in template file
     for key in color:
         query = '{' + key + '}'
         text = text.replace(query, color[key])
 
+    # write parsed text to target file
     with open(link[template], 'w') as f:
         f.write(text)
 
@@ -75,12 +79,14 @@ def add_file(file, name):
 
 def remove_template(arg):
     if arg in link.keys():
+        # if provided template name then just remove
         print(f"found {arg} in templates list, removing ...")
         link.pop(arg)
         os.remove(path.join(templates, arg))
     else:
         print(f"{arg} not found in templates list, trying searching for template associated with it ...")
 
+        # find template name that linked to provided file path
         found = False
         temp = None
         for key in link.keys():
@@ -94,6 +100,7 @@ def remove_template(arg):
             link.pop(temp)
             os.remove(path.join(templates, temp))
         else:
+            # user provided glibberish
             quit(f"cannot find template associated with {arg}")
 
     update_link_json()
@@ -108,11 +115,13 @@ def list_template():
         print()
 
 def list_colorscheme():
+    # list all files in ./colorschemes/
     listd = os.listdir(colorschemes)
     if len(listd) == 0:
         quit("no colorscheme")
 
     for d in listd:
+        # no extension
         print(path.splitext(d)[0])
 
 match sys.argv[1]:
