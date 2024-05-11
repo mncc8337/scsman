@@ -75,19 +75,26 @@ def add_file(file, name):
 
 def remove_template(arg):
     if arg in link.keys():
-        print("found arg in templates list, removing ...")
+        print(f"found {arg} in templates list, removing ...")
         link.pop(arg)
         os.remove(path.join(templates, arg))
     else:
-        print("arg not found in templates list, trying searching for template associated with ..")
-        est_temp_name = arg.replace('/', '_')
+        print(f"{arg} not found in templates list, trying searching for template associated with it ...")
 
-        if est_temp_name in link.keys():
-            print("found template associated with arg, removing ...")
-            link.pop(est_temp_name)
-            os.remove(path.join(templates, est_temp_name))
+        found = False
+        temp = None
+        for key in link.keys():
+            if arg == link[key]:
+                found = True
+                temp = key
+                break
+
+        if found:
+            print(f"found template associated with {arg}, removing ...")
+            link.pop(temp)
+            os.remove(path.join(templates, temp))
         else:
-            quit("cannot find template associated with arg")
+            quit(f"cannot find template associated with {arg}")
 
     update_link_json()
 
@@ -113,15 +120,16 @@ match sys.argv[1]:
         print("""Suck/Simple/Stupid/Shitty ColorScheme MANager (scsman)
 usage: scsman <option> <args>
 option:
-    help                              print this text
-    add <file> <name>                 add <file> to the manager. will create a template named <name> at ./templates. omit <name> to use path as name instead
-    remove-template <file>            remove template associated with <file>. the manager will not manage <file> anymore
+    help                             print this text
+    add <file> <name>                add <file> to the manager. will create a template named <name> at ./templates. omit <name> to use path as name instead
+    remove <name>                    if provided template name then remove the template, if provided file path then the template associated with that file will be remove.
+                                     the manager will not manage the file associated with that template anymore
     list <type>
         type:
-            templates                 list all template and their associated file
-            colorschemes              list all colorschemes available
-    parse <template> <colorscheme>    apply <colorscheme> to the file associated with <template>
-    parse-all <colorscheme>           apply <colorscheme> to all the files added to manager
+            templates                list all template and their associated file
+            colorschemes             list all colorschemes available
+    load <template> <colorscheme>    apply <colorscheme> to the file associated with <template>
+    load-all <colorscheme>           apply <colorscheme> to all the files added to manager
               """)
     case "add":
         if len(sys.argv)-1 == 2:
@@ -130,7 +138,7 @@ option:
             add_file(sys.argv[2], sys.argv[3])
         else:
             quit("missing arg")
-    case "remove-template":
+    case "remove":
         if len(sys.argv)-1 < 1:
             quit("missing arg")
 
@@ -147,14 +155,14 @@ option:
             list_colorscheme()
         else:
             quit("option not available")
-    case "parse":
+    case "load":
         if len(sys.argv)-1 < 3:
             quit("missing arg")
 
         template = sys.argv[2]
         colorscheme = sys.argv[3]
         parse(colorscheme, template)
-    case "parse-all":
+    case "load-all":
         if len(sys.argv)-1 < 1:
             quit("missing arg")
 
