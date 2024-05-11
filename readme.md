@@ -1,5 +1,5 @@
 # scsman
-a simple/suck/stupid/shitty colorscheme manager i wrote aimed to be simple and minimal.
+a suck/simple/stupid/shitty colorscheme manager i wrote aimed to be simple and minimal.
 ## usage
 - add a file to be managed: `./scsman add <file> <name>`
 - replace colors (#aabbcc) in the file `templates/<name>` to `{<key>}`, with \<key\> being any keys in `colorschemes/*.json` (`color0` to `color15`, `active` and `inactive`)
@@ -18,3 +18,11 @@ there are 2 colorschemes pre-written in `./colorschemes/` (`catppuccin-mocha` an
 - now load the colorscheme\
 `./scsman parse rofi gruvbox`
 - finally config `rofi` to use the theme
+## why not just use (wpgtk)[https://github.com/deviantfero/wpgtk]?
+- im lazy to learn new stuff
+- wpgtk has a lot of stuffs that i dont need
+- i just need a simple script for my (rice)[https://github.com/mncc8337/awesomewm-dotfiles]
+- i have nothing to do
+- i want to try to implement this by myself
+## inspirations
+- (wpgtk)[https://github.com/deviantfero/wpgtk] by deviantfero
