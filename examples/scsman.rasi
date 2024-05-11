@@ -1,0 +1,197 @@
+* {
+    color0:		#282828;
+    color1:		#3c3836;
+    color2:		#504945;
+    color3:		#665c54;
+    color4:		#bdae93;
+    color5:		#d5c4a1;
+    color6:		#ebdbb2;
+    color7:		#fbf1c7;
+    color8:		#fb4934;
+    color9:		#fe8019;
+    color10:	#fabd2f;
+    color11:	#b8bb26;
+    color12:	#8ec07c;
+    color13:	#83a598;
+    color14:	#d3869b;
+    color15:	#d65d0e;
+    active:		#665c54;
+    inactive:	#3c3836;
+
+	background:						@color0;
+    foreground:						@color6;
+
+    background-color:				@background;
+    border-color:					@background;
+    separatorcolor:					@color8;
+    scrollbar-handle:				@color9;
+
+    normal-background:				@background;
+    normal-foreground:				@foreground;
+    alternate-normal-background:	@background;
+    alternate-normal-foreground:	@foreground;
+    selected-normal-background:		@active;
+    selected-normal-foreground:		@foreground;
+
+    active-background:				@inactive;
+    active-foreground:				@foreground;
+    alternate-active-background:	@active;
+    alternate-active-foreground:	@foreground;
+    selected-active-background:		@active;
+    selected-active-foreground:		@foreground;
+
+    urgent-background:				@color8;
+    urgent-foreground:				@color15;
+    alternate-urgent-background:	@color8;
+    alternate-urgent-foreground:	@color15;
+    selected-urgent-background:		@color14;
+    selected-urgent-foreground:		@foreground;
+
+    highlight:                      @inactive;
+    scrollbar:                      @active;
+
+    width: 600;
+    font:  "CaskaydiaMono NF 14";
+}
+
+
+window {
+    background-color: @background;
+	border-color:     @active;
+    border:           2;
+    height:           365px;
+}
+
+mainbox {
+    border:  0px;
+	border-color: @active;
+    padding: 0;
+}
+
+message {
+    border:       2px 0 0;
+    border-color: @separatorcolor;
+    padding:      1px;
+}
+
+textbox {
+    highlight:  @highlight;
+    text-color: @color15;
+}
+
+listview {
+    border:       0px 0px 0px;
+    padding:      6px 0px 0px;
+    margin:       10px 0px 0px 20px;
+    columns:      2;
+    lines:        5;
+    border-color: @separatorcolor;
+    scrollbar:    @scrollbar;
+}
+
+element {
+    padding: 5px;
+}
+
+element.normal.normal {
+    background-color: @normal-background;
+    text-color:       @normal-foreground;
+}
+
+element.normal.urgent {
+    background-color: @urgent-background;
+    text-color:       @urgent-foreground;
+}
+
+element.normal.active {
+    background-color: @active-background;
+    text-color:       @active-foreground;
+}
+
+element.selected.normal {
+    background-color: @active;
+    text-color:       @color15;
+}
+
+element.selected.urgent {
+    background-color: @selected-urgent-background;
+    text-color:       @selected-urgent-foreground;
+}
+
+element.selected.active {
+    background-color: @selected-active-background;
+    text-color:       @selected-active-foreground;
+}
+
+element.alternate.normal {
+    background-color: @alternate-normal-background;
+    text-color:       @alternate-normal-foreground;
+}
+
+element.alternate.urgent {
+    background-color: @alternate-urgent-background;
+    text-color:       @alternate-urgent-foreground;
+}
+
+element.alternate.active {
+    background-color: @alternate-active-background;
+    text-color:       @alternate-active-foreground;
+}
+
+scrollbar {
+    width:        4px;
+    border:       0;
+    handle-color: @scrollbar-handle;
+    handle-width: 8px;
+    padding:      0;
+}
+
+sidebar {
+    border:       2px 0 0;
+    border-color: @separatorcolor;
+}
+
+inputbar {
+    text-color:    @normal-foreground;
+    padding:       2px;
+    border-radius: 5px;
+    children:      [ prompt, entry ];
+}
+
+button {
+    spacing:    0;
+    text-color: @normal-foreground;
+}
+
+entry {
+    padding: 6px;
+    margin: 20px 0px 0px 10px;
+    text-color: @normal-foreground;
+    background-color: @background;
+}
+
+prompt {
+    background-color: @active;
+    text-color:       @normal-foreground;
+    padding:          6px;
+    border-radius:    3px;
+    margin:           20px 0px 0px 20px;
+}
+
+button.selected {
+    background-color: @selected-normal-background;
+    text-color:       @selected-normal-foreground;
+}
+
+element-text {
+	text-color:       inherit;
+	background-color: inherit;
+}
+
+mode-switcher {
+    spacing: 0;
+}
+
+element-icon {
+    size: 25px;
+}
