@@ -2,18 +2,21 @@
 a suck/simple/stupid/shitty colorscheme manager i wrote aimed to be simple and minimal.
 ## usage
 ```
-usage: scsman <option> <option args>
+usage: scsman <option> <args>
 option:
-    help                             print this text
-    add <file> <name>                add <file> to the manager. will create a template named <name> at ./templates. omit <name> to use path as name instead
-    remove <name>                    if provided template name then remove the template, if provided file path then the template associated with that file will be remove.
-                                     the manager will not manage the file associated with that template anymore
+    help                             print this text.
+    add <file> <name>                add <file> to the manager.
+                                     will create a template named <name> at ./templates.
+                                     omit <name> to use path as name instead.
+    remove <name>                    if provided template name then remove the template.
+                                     if provided file path then the template associated with that file will be remove.
+                                     the manager will not manage the file associated with that template anymore.
     list <type>
         type:
-            templates                list all template and their associated file
-            colorschemes             list all colorschemes available
-    load <template> <colorscheme>    apply <colorscheme> to the file associated with <template>
-    load-all <colorscheme>           apply <colorscheme> to all the files added to manager
+            templates                list all template and their associated file,.
+            colorschemes             list all colorschemes available.
+    load <template> <colorscheme>    apply <colorscheme> to the file associated with <template>.
+    load-all <colorscheme>           apply <colorscheme> to all the files added to manager.
 ```
 - to add a colorscheme, copy a json file in `./colorschemes`, edit it then add it to `./colorschemes`. to use it just type in the file name without the extension.
 ### example
