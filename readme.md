@@ -8,10 +8,10 @@ a simple/suck/stupid/shitty colorscheme manager i wrote aimed to be simple and m
 \<colorscheme\> is the json file name (with out extension) in `./colorschemes/`\
 see `scsman help` for more options
 ### example
-there are 2 colorschemes pre-written in `./colorschemes/` and a `rofi` theme `./xamples/scsman.rasi`
+there are 2 colorschemes pre-written in `./colorschemes/` (`catppuccin-mocha` and `gruvbox`) and a `rofi` theme `./examples/scsman.rasi`
 - first copy the theme into `rofi` config dir\
 `cp ./examples/scsman.rasi ~/.config/rofi/scsman.rasi`
-- next add the rofi config to scsman\
+- next add the `rofi` config to scsman\
 `./scsman add ~/.config/rofi/scsman.rasi rofi`
 - then replace all colors (#aabbcc) in `templates/rofi` to `{<key>}`, here i just copy the pre-edited file into it\
 `cp ./examples/rofi ./templates/rofi`
