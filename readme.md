@@ -10,9 +10,9 @@ see `scsman help` for more options
 ### example
 there are 2 colorschemes pre-written in `./colorschemes/` and a `rofi` theme `./xamples/scsman.rasi`
 - first copy the theme into `rofi` config dir\
-`cp ./examples/scsman.rasi ~/.config/rofi`
+`cp ./examples/scsman.rasi ~/.config/rofi/scsman.rasi`
 - next add the rofi config to scsman\
-`./scsman add ./examples/scsman.rasi rofi`
+`./scsman add ~/.config/rofi/scsman.rasi rofi`
 - then replace all colors (#aabbcc) in `templates/rofi` to `{<key>}`, here i just copy the pre-edited file into it\
 `cp ./examples/rofi ./templates/rofi`
 - now load the colorscheme\
