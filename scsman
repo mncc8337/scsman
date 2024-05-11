@@ -1,0 +1,164 @@
+#!/bin/env python
+
+import sys
+import os
+from os import path
+import json
+
+loc = path.dirname(__file__)
+templates = path.join(loc, "templates")
+colorschemes = path.join(loc, "colorschemes")
+
+def quit(reason):
+    print(reason)
+    exit(1)
+
+link = {}
+with open(path.join(loc, "link.json"), 'r') as f:
+    link = json.load(f)
+
+def update_link_json():
+    with open(path.join(loc, "link.json"), 'w') as f:
+        json.dump(link, f, indent = 4)
+
+def colorscheme_available(name):
+    return path.isfile(path.join(colorschemes, f"{name}.json"))
+
+def parse(colorscheme, template):
+    if not colorscheme_available(colorscheme):
+        quit(f"no such colorscheme: {colorscheme}")
+
+    text = None
+    with open(path.join(templates, template), 'r') as f:
+        text = f.read()
+
+    color = None
+    with open(path.join(colorschemes, f"{colorscheme}.json"), 'r') as f:
+        color = json.load(f)
+
+    for key in color:
+        query = '{' + key + '}'
+        text = text.replace(query, color[key])
+
+    with open(link[template], 'w') as f:
+        f.write(text)
+
+    print(f"parsed {template}")
+
+def parse_all(colorscheme):
+    for template in link.keys():
+        parse(colorscheme, template)
+
+def add_file(file, name):
+    global link
+
+    if not path.isfile(file):
+        quit(f"no such file: {file}")
+
+    if not name:
+        print("<name> not provided, using path as name ...")
+        name = file.replace('/', '_')
+    else:
+        if name in link.keys():
+            quit("similar template name has been added. please try another")
+
+    # link it
+    link[name] = file
+    update_link_json()
+
+    # create template file
+    with open(file, 'r') as f:
+        with open(path.join(templates, name), 'w') as t:
+            t.write(f.read())
+
+    print(f"added {file} as {name}")
+
+def remove_template(arg):
+    if arg in link.keys():
+        print("found arg in templates list, removing ...")
+        link.pop(arg)
+        os.remove(path.join(templates, arg))
+    else:
+        print("arg not found in templates list, trying searching for template associated with ..")
+        est_temp_name = arg.replace('/', '_')
+
+        if est_temp_name in link.keys():
+            print("found template associated with arg, removing ...")
+            link.pop(est_temp_name)
+            os.remove(path.join(templates, est_temp_name))
+        else:
+            quit("cannot find template associated with arg")
+
+    update_link_json()
+
+def list_template():
+    if len(link.keys()) == 0:
+        quit("no template")
+
+    for template in link.keys():
+        print("template:", template)
+        print("file:    ", link[template])
+        print()
+
+def list_colorscheme():
+    listd = os.listdir(colorschemes)
+    if len(listd) == 0:
+        quit("no colorscheme")
+
+    for d in listd:
+        print(path.splitext(d)[0])
+
+match sys.argv[1]:
+    case "help":
+        print("""Suck/Simple/Stupid/Shitty ColorScheme MANager (scsman)
+usage: scsman <option> <args>
+option:
+    help                              print this text
+    add <file> <name>                 add <file> to the manager. will create a template named <name> at ./templates. omit <name> to use path as name instead
+    remove-template <file>            remove template associated with <file>. the manager will not manage <file> anymore
+    list <type>
+        type:
+            templates                 list all template and their associated file
+            colorschemes              list all colorschemes available
+    parse <template> <colorscheme>    apply <colorscheme> to the file associated with <template>
+    parse-all <colorscheme>           apply <colorscheme> to all the files added to manager
+              """)
+    case "add":
+        if len(sys.argv)-1 == 2:
+            add_file(sys.argv[2], None)
+        elif len(sys.argv)-1 == 3:
+            add_file(sys.argv[2], sys.argv[3])
+        else:
+            quit("missing arg")
+    case "remove-template":
+        if len(sys.argv)-1 < 1:
+            quit("missing arg")
+
+        arg = sys.argv[2]
+        remove_template(arg)
+    case "list":
+        if len(sys.argv)-1 < 1:
+            quit("missing arg")
+        
+        typ = sys.argv[2]
+        if typ == "templates":
+            list_template()
+        elif typ == "colorschemes":
+            list_colorscheme()
+        else:
+            quit("option not available")
+    case "parse":
+        if len(sys.argv)-1 < 3:
+            quit("missing arg")
+
+        template = sys.argv[2]
+        colorscheme = sys.argv[3]
+        parse(colorscheme, template)
+    case "parse-all":
+        if len(sys.argv)-1 < 1:
+            quit("missing arg")
+
+        colorscheme = sys.argv[2]
+        parse_all(colorscheme)
+    case _:
+        quit("invalid option. run `scsman help` for all available options")
