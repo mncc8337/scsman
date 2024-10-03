@@ -4,29 +4,62 @@ import sys
 import os
 from os import path
 import json
-
-loc = path.dirname(__file__)
-templates = path.join(loc, "templates")
-colorschemes = path.join(loc, "colorschemes")
+import random
 
 def quit(reason):
     print(reason)
     exit(1)
 
+# default config dir
+config_dir = os.path.expanduser("~/.config/scsman")
+templates = path.join(config_dir, "templates")
+colorschemes = path.join(config_dir, "colorschemes")
+link_file = path.join(config_dir, "link.json")
+
+if not os.path.exists(config_dir):
+    os.mkdir(config_dir)
+    print("created config dir")
+
+if not os.path.exists(templates):
+    os.mkdir(templates)
+    print("created templates dir")
+
+if not os.path.exists(colorschemes):
+    os.mkdir(colorschemes)
+    print("created colorschemes dir")
+
+if not os.path.exists(link_file):
+    with open(link_file, 'w') as f:
+        f.write("{}");
+    print("created link file")
+
+if len(sys.argv) == 1:
+    exit(0)
+
 link = {}
-with open(path.join(loc, "link.json"), 'r') as f:
+with open(link_file, 'r') as f:
     link = json.load(f)
 
+def unique_randomword():
+    alphabet = "qwertyuiopasdfghjklzxcvbnm1234567890"
+    ans = ''
+    ans += random.choice(alphabet)
+    ans += random.choice(alphabet)
+    ans += random.choice(alphabet)
+    while ans in link.keys():
+        ans += random.choice(alphabet)
+    return ans
+
 def update_link_json():
-    with open(path.join(loc, "link.json"), 'w') as f:
+    with open(link_file, 'w') as f:
         json.dump(link, f, indent = 4)
 
-def colorscheme_available(name):
-    return path.isfile(path.join(colorschemes, f"{name}.json"))
-
 def parse(colorscheme, template):
-    if not colorscheme_available(colorscheme):
+    if not path.isfile(path.join(colorschemes, f"{colorscheme}.json")):
         quit(f"no such colorscheme: {colorscheme}")
+
+    if not path.isfile(path.join(path.join(templates, template))):
+        quit(f"no such template: {template}")
 
     # load text in template file
     text = None
@@ -44,12 +77,15 @@ def parse(colorscheme, template):
         text = text.replace(query, color[key])
 
     # write parsed text to target file
-    with open(link[template], 'w') as f:
+    with open(os.path.expanduser(link[template]), 'w') as f:
         f.write(text)
 
     print(f"parsed {template}")
 
 def parse_all(colorscheme):
+    if len(link.keys()) == 0:
+        quit("no managed file")
+
     for template in link.keys():
         parse(colorscheme, template)
 
@@ -60,8 +96,8 @@ def add_file(file, name):
         quit(f"no such file: {file}")
 
     if not name:
-        print("<name> not provided, using path as name ...")
-        name = file.replace('/', '_')
+        print("<name> not provided, using random name ...")
+        name = unique_randomword()
     else:
         if name in link.keys():
             quit("similar template name has been added. please try another")
@@ -90,7 +126,7 @@ def remove_template(arg):
         found = False
         temp = None
         for key in link.keys():
-            if arg == link[key]:
+            if os.path.expanduser(arg) == os.path.expanduser(link[key]):
                 found = True
                 temp = key
                 break
@@ -157,7 +193,7 @@ option:
         arg = sys.argv[2]
         remove_template(arg)
     case "list":
-        if len(sys.argv)-1 < 1:
+        if len(sys.argv)-1 < 2:
             quit("missing arg")
         
         typ = sys.argv[2]
