@@ -95,6 +95,8 @@ def parse_all(colorscheme):
 def add_file(file, name):
     global link
 
+    file = path.abspath(file)
+
     if not path.isfile(file):
         quit(f"no such file: {file}")
 
