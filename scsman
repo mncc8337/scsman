@@ -58,12 +58,15 @@ def parse(colorscheme, template):
     if not path.isfile(path.join(colorschemes, f"{colorscheme}.json")):
         quit(f"no such colorscheme: {colorscheme}")
 
-    if not path.isfile(path.join(path.join(templates, template))):
+    if template not in link.keys():
         quit(f"no such template: {template}")
+
+    ext = path.splitext(link[template])[1]
+    template_ext = template + ext
 
     # load text in template file
     text = None
-    with open(path.join(templates, template), 'r') as f:
+    with open(path.join(templates, template_ext), 'r') as f:
         text = f.read()
 
     # load colorscheme
@@ -95,6 +98,9 @@ def add_file(file, name):
     if not path.isfile(file):
         quit(f"no such file: {file}")
 
+    ext = path.splitext(file)[1]
+    if ext: ext = '.' + ext
+
     if not name:
         print("<name> not provided, using random name ...")
         name = unique_randomword()
@@ -108,10 +114,11 @@ def add_file(file, name):
 
     # create template file
     with open(file, 'r') as f:
-        with open(path.join(templates, name), 'w') as t:
+        with open(path.join(templates, name + ext), 'w') as t:
             t.write(f.read())
 
     print(f"added {file} as {name}")
+    print("remember to replace any color value e.g #deadbe to {key} in", path.join(templates, name + ext))
 
 def remove_template(arg):
     if arg in link.keys():
@@ -160,8 +167,7 @@ def list_colorscheme():
         # no extension
         print(path.splitext(d)[0])
 
-match sys.argv[1]:
-    case "help":
+def print_help():
         print("""Suck/Simple/Stupid/Shitty ColorScheme MANager (scsman)
 usage: scsman <option> <args>
 option:
@@ -179,6 +185,10 @@ option:
     load <template> <colorscheme>    apply <colorscheme> to the file associated with <template>.
     load-all <colorscheme>           apply <colorscheme> to all the files added to manager.
               """)
+
+match sys.argv[1]:
+    case "help":
+        print_help()
     case "add":
         if len(sys.argv)-1 == 2:
             add_file(sys.argv[2], None)
@@ -217,4 +227,6 @@ option:
         colorscheme = sys.argv[2]
         parse_all(colorscheme)
     case _:
-        quit("invalid option. run `scsman help` for all available options")
+        print("invalid option.\n")
+        print_help()
+        exit(1)

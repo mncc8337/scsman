@@ -28,7 +28,7 @@ there are 2 colorschemes pre-written in `./example/colorschemes/` (`catppuccin-m
 - next add the `rofi` config to scsman\
 `scsman add ~/.config/rofi/scsman.rasi rofi`
 - then replace all colors (for example #aabbcc) in `~/.config/scsman/templates/rofi` to `{<key>}`, here i just copy the pre-edited file into it\
-`cp ./example/rofi ~/.config/scsman/templates/rofi`
+`cp ./example/rofi.rasi ~/.config/scsman/templates/`
 - now load the colorscheme\
 `scsman load rofi gruvbox`
 - finally config `rofi` to use the theme
