@@ -1,7 +1,7 @@
 # scsman
-> [WARNING]
-> this thing sucks please dont use it
 a suck/simple/stupid/shitty colorscheme manager aimed to be simple and minimal.
+> [!WARNING]
+> this thing sucks please dont use it
 ## install
 just copy `scsman` to somewhere in `$PATH`
 ## usage
